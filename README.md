@@ -44,7 +44,7 @@ scanf языка C.
 	)
 	
 	func main() {
-		var m, n rune
+		var m, n int
 		input.Scanf("%d%d", &m, &n)
 		fmt.Printf("%d %d\n", m, n)
 	}
