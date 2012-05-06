@@ -13,7 +13,5 @@ int scanint(char *fmt, int *res)
 
 int scanstring(char *fmt, char **res)
 {
-	int n = scanf(fmt, res);
-	printf("scanned %s\n", *res);
-	return n;
+	return scanf(fmt, res);
 }

@@ -65,7 +65,7 @@ func Scanf(format string, a ...interface{}) (n int) {
 					panic("input.Scanf: argument must be pointer to some integer variable")
 				}
 			} else if spec == 's' {
-				buf = append(buf, 'a', 's')
+				buf = append(buf, 'm', 's')
 				fmt := C.CString(string(buf))
 				buf = buf[:0]
 				var res *C.char
