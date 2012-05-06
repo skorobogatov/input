@@ -34,37 +34,57 @@ func Scanf(format string, a ...interface{}) (n int) {
 			buf = append(buf, '%')
 		} else {
 			spec := format[i]
-			if spec != 'd' && spec != 'c' {
-				panic("input.Scanf: only '%d' and '%c' format specifiers allowed")
-			}
-
 			if arg == len(a) {
 				panic("input.Scanf: the number of format specifiers exeeds the number of arguments")
 			}
 
-			buf = append(buf, spec)
-			fmt := C.CString(string(buf))
-			var res C.int
-			n += int(C.scanint(fmt, &res))
-			C.free(unsafe.Pointer(fmt))
-			buf = buf[:0]
-
-			switch p := a[arg].(type) {
-			case nil:
+			if a[arg] == nil {
 				panic("input.Scanf: nil pointer passed as argument")
-			case *uint: *p = uint(res)
-			case *uint8: *p = uint8(res)
-			case *uint16: *p = uint16(res)
-			case *uint32: *p = uint32(res)
-			case *uint64: *p = uint64(res)
-			case *int: *p = int(res)
-			case *int8: *p = int8(res)
-			case *int16: *p = int16(res)
-			case *int32: *p = int32(res)
-			case *int64: *p = int64(res)
-			default:
-				panic("input.Scanf: argument must be pointer to some integer type")
 			}
+
+			if spec == 'd' || spec == 'c' {
+				buf = append(buf, spec)
+				fmt := C.CString(string(buf))
+				buf = buf[:0]
+				var res C.int
+				n += int(C.scanint(fmt, &res))
+				C.free(unsafe.Pointer(fmt))
+
+				switch p := a[arg].(type) {
+				case *uint: *p = uint(res)
+				case *uint8: *p = uint8(res)
+				case *uint16: *p = uint16(res)
+				case *uint32: *p = uint32(res)
+				case *uint64: *p = uint64(res)
+				case *int: *p = int(res)
+				case *int8: *p = int8(res)
+				case *int16: *p = int16(res)
+				case *int32: *p = int32(res)
+				case *int64: *p = int64(res)
+				default:
+					panic("input.Scanf: argument must be pointer to some integer variable")
+				}
+			} else if spec == 's' {
+				buf = append(buf, 'a', 's')
+				fmt := C.CString(string(buf))
+				buf = buf[:0]
+				var res *C.char
+				count := int(C.scanstring(fmt, &res))
+				C.free(unsafe.Pointer(fmt))
+
+				if count == 1 {
+					n++
+					if p, ok := a[arg].(*string); ok {
+						*p = C.GoString(res)
+						C.free(unsafe.Pointer(res))
+					} else {
+						panic("input.Scanf: argument must be pointer to string variable")
+					}
+				}
+			} else {
+				panic("input.Scanf: only '%d', '%c' and 's' format specifiers allowed")
+			}
+			
 			arg++
 		}
 		i++

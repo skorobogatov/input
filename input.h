@@ -10,3 +10,8 @@ int scanint(char *fmt, int *res)
 {
 	return scanf(fmt, res);
 }
+
+int scanstring(char *fmt, char **res)
+{
+	return scanf(fmt, res);
+}
