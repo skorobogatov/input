@@ -4,7 +4,7 @@ package input
 // #include <stdlib.h>
 // #include "input.h"
 //
-// #cgo CFLAGS: -O3 -Wno-error=format-security -Wno-format-nonliteral -Wno-format-extra-args
+// #cgo CFLAGS: -O3 -Wno-error=format-security -Wno-format-nonliteral -Wno-format-extra-args -Wno-format-security
 //
 import "C"
 
