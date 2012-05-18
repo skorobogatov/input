@@ -27,9 +27,8 @@ static char *getstring()
 	s = (char*)malloc(INITIAL_SIZE);
 	if (s == NULL) return NULL;
 
-	do
-	{
-		if (fgets(s+len,size-len,stdin) == NULL) {
+	do {
+		if (fgets(s+len, size-len, stdin) == NULL) {
 			free(s);
 			return NULL;
 		}
@@ -44,12 +43,11 @@ static char *getstring()
 				return NULL;
 			}
 
-			memcpy(new_s,s,len);
+			memcpy(new_s, s, len);
 			free(s);
 			s = new_s;
 		}
-	}
-	while (flag);
+	} while (flag);
 
 	s[len-1] = 0;
 	return s;
