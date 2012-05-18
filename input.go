@@ -96,7 +96,7 @@ func Scanf(format string, a ...interface{}) (n int) {
 func Gets() (s string) {
 	cs := C.getstring()
 	if cs == nil {
-		return ""
+		panic("input.Gets: I/O error or out of memory")
 	}
 
 	s = C.GoString(cs)
