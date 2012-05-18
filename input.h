@@ -1,17 +1,56 @@
 
+#include <string.h>
 #include <stdio.h>
 
-int scanverbatim(char *fmt)
+static int scanverbatim(char *fmt)
 {
 	return scanf(fmt);
 }
 
-int scanint(char *fmt, int *res)
+static int scanint(char *fmt, int *res)
 {
 	return scanf(fmt, res);
 }
 
-int scanstring(char *fmt, char **res)
+static int scanstring(char *fmt, char **res)
 {
 	return scanf(fmt, res);
+}
+
+#define INITIAL_SIZE 128
+
+static char *getstring()
+{
+	char *s;
+	int flag, len = 0, size = INITIAL_SIZE;
+
+	s = (char*)malloc(INITIAL_SIZE);
+	if (s == NULL) return NULL;
+
+	do
+	{
+		if (fgets(s+len,size-len,stdin) == NULL) {
+			free(s);
+			return NULL;
+		}
+
+		len += (int)strlen(s+len);
+		flag = s[len-1] != '\n';
+
+		if (flag) {
+			char *new_s = (char*)malloc(size *= 2);
+			if (new_s == NULL) {
+				free(s);
+				return NULL;
+			}
+
+			memcpy(new_s,s,len);
+			free(s);
+			s = new_s;
+		}
+	}
+	while (flag);
+
+	s[len-1] = 0;
+	return s;
 }

@@ -92,3 +92,14 @@ func Scanf(format string, a ...interface{}) (n int) {
 
 	return
 }
+
+func Gets() (s string) {
+	cs := C.getstring()
+	if cs == nil {
+		return ""
+	}
+
+	s = C.GoString(cs)
+	C.free(unsafe.Pointer(cs))
+	return
+}
