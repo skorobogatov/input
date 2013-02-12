@@ -42,11 +42,97 @@ func Scanf(format string, a ...interface{}) (n int) {
 				panic("input.Scanf: nil pointer passed as argument")
 			}
 
-			if spec == 'd' || spec == 'c' {
-				buf = append(buf, spec)
-				fmt := C.CString(string(buf))
+			if spec == 'd' {
+				switch p := a[arg].(type) {
+				case *uint: {
+					buf = append(buf, ([]byte)("llu")...)
+					fmt := C.CString(string(buf))
+					var res C.ulonglong
+					n += int(C.scanuint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = uint(res)
+				}
+				case *uint8: {
+					buf = append(buf, 'l', 'l' ,'u')
+					fmt := C.CString(string(buf))
+					var res C.ulonglong
+					n += int(C.scanuint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = uint8(res)
+				}
+				case *uint16: {
+					buf = append(buf, 'l', 'l' ,'u')
+					fmt := C.CString(string(buf))
+					var res C.ulonglong
+					n += int(C.scanuint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = uint16(res)
+				}
+				case *uint32: {
+					buf = append(buf, 'l', 'l' ,'u')
+					fmt := C.CString(string(buf))
+					var res C.ulonglong
+					n += int(C.scanuint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = uint32(res)
+				}
+				case *uint64: {
+					buf = append(buf, 'l', 'l' ,'u')
+					fmt := C.CString(string(buf))
+					var res C.ulonglong
+					n += int(C.scanuint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = uint64(res)
+				}
+				case *int: {
+					buf = append(buf, 'l', 'l' ,'d')
+					fmt := C.CString(string(buf))
+					var res C.longlong
+					n += int(C.scanint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = int(res)
+				}
+				case *int8: {
+					buf = append(buf, 'l', 'l' ,'d')
+					fmt := C.CString(string(buf))
+					var res C.longlong
+					n += int(C.scanint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = int8(res)
+				}
+				case *int16: {
+					buf = append(buf, 'l', 'l' ,'d')
+					fmt := C.CString(string(buf))
+					var res C.longlong
+					n += int(C.scanint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = int16(res)
+				}
+				case *int32: {
+					buf = append(buf, 'l', 'l' ,'d')
+					fmt := C.CString(string(buf))
+					var res C.longlong
+					n += int(C.scanint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = int32(res)
+				}
+				case *int64: {
+					buf = append(buf, 'l', 'l' ,'d')
+					fmt := C.CString(string(buf))
+					var res C.longlong
+					n += int(C.scanint(fmt, &res))
+					C.free(unsafe.Pointer(fmt))
+					*p = int64(res)
+				}
+				default:
+					panic("input.Scanf: argument must be pointer to some integer variable")
+				}
+				
 				buf = buf[:0]
-				var res C.int
+			} else if spec == 'c' {
+				buf = append(buf, 'c')
+				fmt := C.CString(string(buf))
+				var res C.longlong
 				n += int(C.scanint(fmt, &res))
 				C.free(unsafe.Pointer(fmt))
 
@@ -64,6 +150,8 @@ func Scanf(format string, a ...interface{}) (n int) {
 				default:
 					panic("input.Scanf: argument must be pointer to some integer variable")
 				}
+				
+				buf = buf[:0]
 			} else if spec == 's' {
 				buf = append(buf, 'm', 's')
 				fmt := C.CString(string(buf))

@@ -7,7 +7,12 @@ static int scanverbatim(char *fmt)
 	return scanf(fmt);
 }
 
-static int scanint(char *fmt, int *res)
+static int scanuint(char *fmt, unsigned long long *res)
+{
+	return scanf(fmt, res);
+}
+
+static int scanint(char *fmt, long long *res)
 {
 	return scanf(fmt, res);
 }
