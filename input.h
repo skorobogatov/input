@@ -1,4 +1,6 @@
 
+#include <wchar.h>
+#include <locale.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -14,6 +16,12 @@ static int scanuint(char *fmt, unsigned long long *res)
 
 static int scanint(char *fmt, long long *res)
 {
+	return scanf(fmt, res);
+}
+
+static int scanchar(char *fmt, wchar_t *res)
+{
+	setlocale(LC_ALL, "");
 	return scanf(fmt, res);
 }
 

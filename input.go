@@ -127,13 +127,13 @@ func Scanf(format string, a ...interface{}) (n int) {
 				default:
 					panic("input.Scanf: argument must be pointer to some integer variable")
 				}
-				
+
 				buf = buf[:0]
 			} else if spec == 'c' {
-				buf = append(buf, 'c')
+				buf = append(buf, 'l', 'c')
 				fmt := C.CString(string(buf))
-				var res C.longlong
-				n += int(C.scanint(fmt, &res))
+				var res C.wchar_t
+				n += int(C.scanchar(fmt, &res))
 				C.free(unsafe.Pointer(fmt))
 
 				switch p := a[arg].(type) {
@@ -150,7 +150,7 @@ func Scanf(format string, a ...interface{}) (n int) {
 				default:
 					panic("input.Scanf: argument must be pointer to some integer variable")
 				}
-				
+
 				buf = buf[:0]
 			} else if spec == 's' {
 				buf = append(buf, 'm', 's')
@@ -172,7 +172,7 @@ func Scanf(format string, a ...interface{}) (n int) {
 			} else {
 				panic("input.Scanf: only '%d', '%c' and 's' format specifiers allowed")
 			}
-			
+
 			arg++
 		}
 		i++
