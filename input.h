@@ -19,6 +19,11 @@ static int scanint(char *fmt, long long *res)
 	return scanf(fmt, res);
 }
 
+static int scandouble(char *fmt, double *res)
+{
+	return scanf(fmt, res);
+}
+
 static int scanchar(char *fmt, wchar_t *res)
 {
 	setlocale(LC_ALL, "");

@@ -152,6 +152,21 @@ func Scanf(format string, a ...interface{}) (n int) {
 				}
 
 				buf = buf[:0]
+			} else if spec == 'f' {
+				buf = append(buf, 'l', 'f')
+				fmt := C.CString(string(buf))
+				var res C.double
+				n += int(C.scandouble(fmt, &res))
+				C.free(unsafe.Pointer(fmt))
+				
+				switch p := a[arg].(type) {
+				case *float32: *p = float32(res)
+				case *float64: *p = float64(res)
+				default:
+					panic("input.Scanf: argument must be pointer to some floating-point variable")
+				}
+
+				buf = buf[:0]
 			} else if spec == 's' {
 				buf = append(buf, 'm', 's')
 				fmt := C.CString(string(buf))
